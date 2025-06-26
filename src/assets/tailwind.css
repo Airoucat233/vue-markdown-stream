@@ -1,0 +1,22 @@
+@theme {
+  --animate-skeleton-loading: skeleton-loading 2.5s infinite ease-in-out;
+  --animate-wiggle: wiggle 0.5s ease-in-out infinite;
+  @keyframes skeleton-loading {
+    0%,
+    100% {
+      background-color: hsl(199, 35%, 88%);
+    }
+    50% {
+      background-color: hsl(200, 20%, 95%);
+    }
+  }
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(-10deg);
+    }
+    50% {
+      transform: rotate(10deg);
+    }
+  }
+}

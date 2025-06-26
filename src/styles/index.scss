@@ -1,0 +1,65 @@
+$lineNumbersWrapperWidth : 3.5rem !default;
+$codeBgColor: #f6f8fa !default;
+
+.markdown-body {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    border-radius: 4px;
+    background-color: var(--background);
+
+    ul,
+    ol {
+        list-style: revert;
+    }
+
+    .pre {
+        background-color: var(--color-red-500);
+    }
+
+    .line-numbers-mode {
+        line-height: 1.7;
+        position: relative;
+
+        pre {
+            margin-left: $lineNumbersWrapperWidth;
+            vertical-align: middle;
+            line-height: inherit;
+        }
+
+        .line-numbers-wrapper {
+            position: absolute;
+            top: 0;
+            width: $lineNumbersWrapperWidth;
+            text-align: center;
+            color: gray;
+            padding: 1rem 0;
+            line-height: inherit;
+            font-size: 85%;
+
+            br {
+                user-select: none;
+            }
+
+            .line-number {
+                position: relative;
+                z-index: 4;
+                user-select: none;
+            }
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            z-index: 2;
+            top: 0;
+            left: 0;
+            width: $lineNumbersWrapperWidth;
+            height: 100%;
+            border-radius: 6px 0 0 6px;
+            border-right: 1px solid rgba(0, 0, 0, 0.092);
+            background-color: $codeBgColor;
+        }
+
+    }
+}

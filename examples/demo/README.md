@@ -1,4 +1,4 @@
-# muti-agent-ui
+# demo
 
 This template should help get you started developing with Vue 3 in Vite.
 
@@ -30,14 +30,4 @@ pnpm dev
 
 ```sh
 pnpm build
-```
-
-## 组件安装
-
-```sh
-pnpm dlx shadcn-vue@latest init
-```
-
-```sh
-pnpm dlx shadcn-vue@latest add button
 ```
