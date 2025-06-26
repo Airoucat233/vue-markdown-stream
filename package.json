@@ -1,6 +1,6 @@
 {
   "name": "vue-markdown-stream",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "type": "module",
   "main": "./dist/umd/src/index.js",
   "module": "./dist/es/src/index.js",
