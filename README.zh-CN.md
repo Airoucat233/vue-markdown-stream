@@ -1,40 +1,42 @@
 # vue-markdown-stream
 
-🌐 English | [简体中文](./README.zh-CN.md)
+🌐 [English](./README.md) | 简体中文
 
-A Vue 3 component based on [markdown-it](https://github.com/markdown-it/markdown-it), specifically optimized for efficient code block rendering in streaming scenarios (e.g., streaming responses from Large Language Models (LLMs)).
+一个基于 [markdown-it](https://github.com/markdown-it/markdown-it) 的 Vue 3 组件，专为在流式场景（例如大型语言模型 (LLM) 的流式响应）中高效渲染代码块而优化。
 
-## 🔍 Features
-### 🚀 Streaming Response Rendering Mechanism Support
-Designed for real-time content update scenarios like **Large Language Model (LLM) streaming output**. Compared to traditional Markdown rendering solutions, this component achieves **incremental rendering**, avoiding repeated repainting of the entire HTML block.
+## 🔍 功能特点
+### 🚀 支持流式响应的渲染机制
+专为**大语言模型（LLM）流式输出**等实时内容更新场景设计。相比传统 Markdown 渲染方案，本组件能做到**增量渲染**，避免整段 HTML 的反复重绘。
 
-### 🔧 Based on markdown-it Plugin Ecosystem
-Fully compatible with the `markdown-it` plugin ecosystem. On this basis, you can customize your code block rendering plugins through Vue Components.
+### 🔧 基于 markdown-it 插件生态
+完全兼容`markdown-it`插件生态，在此基础上通过Vue Component自定义您的代码块渲染插件
 
-Visit 👉[markdown-it](https://github.com/markdown-it/markdown-it) to learn about the plugin ecosystem.
+前往👉[markdown-it](https://github.com/markdown-it/markdown-it)了解插件生态
 
-### 🧩 Custom Component Injection Support
-For code blocks like ```echarts, they can be rendered as true Vue components, such as your custom `Echarts.vue`.
+### 🧩 支持自定义组件注入
+对于像 ```echarts 这样的代码块，可以渲染为真正的 Vue 组件，比如您自定义的`Echarts.vue`
 
-### 🔄 VNode-based Rendering Method
-No longer relies on v-html, but directly converts Markdown tokens into Vue's Virtual DOM (VNode), offering:
+### 🔄 基于 VNode 的渲染方式
+不再依赖 v-html，而是将 Markdown token 直接转换为 Vue 的 虚拟 DOM (VNode)，具备：
 
-* Finer-grained responsive updates
-* Better performance and controllability
-* Higher security (no HTML injection risk)
+更细粒度的响应式更新
 
-🎯 Minimized DOM Updates
-Adapted for streaming text updates, based on Vue's VNode diff strategy, only necessary parts are updated, resulting in excellent performance.
+更好的性能和可控性
 
-## Installation
+更高的安全性（无 HTML 注入风险）
+
+🎯 最小化 DOM 更新
+适配流式文本更新，基于 Vue 的 VNode diff 策略，只更新必要部分，性能表现优秀。
+
+## 安装
 
 ```sh
 pnpm install vue-markdown-stream
 ```
 
-## Usage Examples
+## 使用示例
 
-### Simple Usage
+### 简单使用
 
 ```vue
 <template>
@@ -48,7 +50,7 @@ import { ref } from 'vue'
 import VueMarkdown from 'vue-markdown-stream'
 
 const markdownContent = ref(`
-# This is a Markdown example
+# 这是一段Markdown示例
 `)
 
 </script>
@@ -56,7 +58,7 @@ const markdownContent = ref(`
 <style scoped>
 </style>
 ```
-### In Streaming Scenarios
+### 流式场景下
 ```vue
 <template>
   <div>
@@ -70,9 +72,9 @@ import VueMarkdownStream,{useTypewriter} from 'vue-markdown-stream'
 
 const markdownContent = ref('')
 
-// Simulate streaming content updates
+// 模拟流式内容更新
 const streamContent = `
-Below is a custom code block
+以下是一段自定义的代码块
 `
 const { startTyping } = useTypewriter()
 const stop = startTyping(streamContent,100,[3,5],(text)=>{
@@ -83,9 +85,9 @@ const stop = startTyping(streamContent,100,[3,5],(text)=>{
 <style scoped>
 </style>
 ```
-### Custom Component Code Block Plugin
+### 自定义组件式代码块插件
 
-If I ask a large model or backend to return a fixed format code block through some means, for example:
+假如我通过一些手段要求大模型或者后端固定返回特定格式代码块,比如这样:
 
 ~~~json
 
@@ -93,18 +95,18 @@ If I ask a large model or backend to return a fixed format code block through so
   ```echarts
     {
         "title": {
-        "text": "ECharts Example Chart"
+        "text": "ECharts 示例图表"
       },
         "tooltip": {},
         "legend": {
-        "data": ["Sales"]
+        "data": ["销量"]
       },
         "xAxis": {
-        "data": ["Shirt", "Cardigan", "Chiffon Shirt", "Pants", "High Heels"]
+        "data": ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋"]
       },
         "yAxis": {},
         "series": [{
-        "name": "Sales",
+        "name": "销量",
         "type": "bar",
         "data": [5, 20, 36, 10, 10]
       }]
@@ -113,9 +115,9 @@ If I ask a large model or backend to return a fixed format code block through so
 
 ~~~
 
-Then define the component corresponding to the `echarts` fence identifier, you can render this code block in markdown as a Vue component, injected via the `fencePlugin` props. See below:
+然后定义`echarts`这个fence标志对应的组件,就可以将markdown中这一段代码块渲染为Vue组件，通过`fencePlugin` props注入,接着看：
 
-#### Parent Component
+#### 父组件
 
 ```vue
 <template>
@@ -131,7 +133,7 @@ import Echarts from '/path/to/Echarts.vue'
 import Mermaid from '/path/to/Mermaid.vue'
 
 const pluginsMap = ref({
-  // The key is the custom code block identifier, the value is the imported custom component
+  //key就是自定义的代码块标志,value是引入的自定义组件
   echarts:Echarts,
   mermaid:Mermaid
 })
@@ -142,7 +144,7 @@ const markdownContent = ref('')
 </style>
 ```
 
-A custom Echarts component is as follows:
+一个自定义Echarts组件如下:
 
 #### Echarts.vue
 
@@ -162,7 +164,7 @@ pnpm install echarts
     >
       <span
         class="loading-text flex animate-pulse bg-gradient-to-r from-green-500 via-blue-500 to-violet-500 bg-clip-text text-[1.2rem] font-bold text-transparent"
-        >Chart rendering</span
+        >图表渲染中</span
       >
       <div class="animate-wiggle h-5 w-5 rounded-sm bg-green-500"></div>
     </div>
@@ -228,9 +230,9 @@ onBeforeUnmount(() => {
 
 ```
 
-### Using markdown-it plugins
+### 使用markdown-it插件
 
-VueMarkdownStream also retains the native markdown-it plugin integration capability, which can be injected via the component's `plugin` props.
+VueMarkdownStream同样保留了原生markdown-it插件集成能力,可以通过组件的`plugin` props注入
 
 
 ```sh
@@ -259,9 +261,9 @@ const markdownContent = ref('')
 </style>
 ```
 
-### Using your own markdown-it object
+### 使用自己的markdown-it对象
 
-To support full customization, you can also pass a custom markdown-it object, which means this component only enhances the fence code block plugin.
+为了支持完全自定义,你也可以传入自定义markdown-it对象,相当于本组件只是做了一个fence代码块的插件增强
 
 ```vue
 <template>
@@ -276,10 +278,10 @@ import VueMarkdown from 'vue-markdown-stream'
 
 const markdownContent = ref('')
 
-const myMarkdownIt = new MarkdownIt({...})//Your custom MarkdownIt
+const myMarkdownIt = new MarkdownIt({...})//你的自定义MarkdownIt
 
 </script>
 
 <style scoped>
 </style>
-``` 
+```

@@ -11,53 +11,54 @@ import 'highlight.js/styles/github.css'
 import 'github-markdown-css/github-markdown.css'
 import './styles/index.scss'
 
-import { ref, computed, onMounted, type Component } from 'vue'
+import { computed, onMounted, type Component } from 'vue'
 
-import { full as emoji } from 'markdown-it-emoji'
 import { useVNodeRenderer } from './hooks/useVNodeRenderer'
-import preWrapperPlugin from './plugins/preWrapper'
-import lineNumbersPlugin from './plugins/lineNumbers'
+import type { MarkdownItPluginEntry } from './types'
 
 const props = defineProps<{
-  modelValue: string
-  plugin?: Record<string, Component>
+  content: string
+  md?: MarkdownIt
+  plugin?: MarkdownItPluginEntry[]
+  fencePlugin?: Record<string, Component>
 }>()
 
-const emit = defineEmits(['event', 'update:modelValue'])
+const emit = defineEmits([])
 
-const md: MarkdownIt = new MarkdownIt({
-  html: true,
-  linkify: true,
-  breaks: true,
-  highlight: function (str, lang) {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return (
-          '<pre class="hljs"><code>' +
-          hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
-          '</code></pre>'
-        )
-      } catch (__) {}
+const md: MarkdownIt =
+  props.md ||
+  new MarkdownIt({
+    html: true,
+    linkify: true,
+    breaks: true,
+    highlight: function (str, lang) {
+      if (lang && hljs.getLanguage(lang)) {
+        try {
+          return (
+            '<pre class="hljs"><code>' +
+            hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
+            '</code></pre>'
+          )
+        } catch (__) {}
+      }
+
+      return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
+    },
+  })
+if (props.plugin) {
+  for (const plugin of props.plugin) {
+    if (typeof plugin === 'function') {
+      md.use(plugin)
+    } else {
+      md.use(...plugin)
     }
+  }
+}
 
-    return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
-  },
-})
-md.use(preWrapperPlugin)
-md.use(lineNumbersPlugin)
-md.use(emoji)
-
-const plugins = computed(() => ({
-  ...{
-    // ehcarts: ECharts,
-  },
-  ...props.plugin,
-}))
-
-const { render } = useVNodeRenderer(md, plugins.value)
+const { render } = useVNodeRenderer(md, props.fencePlugin ?? {})
 
 const vnodeTree = computed(() => {
-  return render(props.modelValue)
+  return render(props.content)
 })
 
 onMounted(() => {})

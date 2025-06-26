@@ -5,7 +5,7 @@ export function useTypewriter() {
 
   function startTyping(
     text: string,
-    speed = 100,
+    speed: number = 100,
     range: [number, number] = [1, 3],
     onUpdate?: (segment: string) => void,
     onDone?: (output: string) => void,

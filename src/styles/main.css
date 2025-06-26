@@ -1,4 +1,5 @@
 @import './base.css';
 @import 'tailwindcss';
+@import 'tw-animate-css';
 @import './theme.css';
 @import './tailwind.css';

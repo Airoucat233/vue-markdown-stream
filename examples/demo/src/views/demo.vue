@@ -1,13 +1,72 @@
 <template>
-  <div>
-    <VueMarkdown v-model="content"></VueMarkdown>
+  <div class="flex gap-2 px-16 py-6">
+    <VueMarkdown class="p-10 !text-[0.9rem]" :content="content" :md="myMarkdownIt"></VueMarkdown>
+    <VueMarkdown
+      class="p-10 !text-[0.9rem]"
+      :content="content"
+      :fence-plugin="fencePlugin"
+      :plugin="plugin"
+    ></VueMarkdown>
   </div>
 </template>
 <script setup lang="ts">
-import VueMarkdown from 'vue-markdown-stream'
+import VueMarkdown, { useTypewriter } from 'vue-markdown-stream-test'
+import 'vue-markdown-stream-test/dist/index.css'
 import { ref } from 'vue'
+import Echarts from '@/components/Echarts.vue'
+import { full as emoji } from 'markdown-it-emoji'
+import MarkdownIt from 'markdown-it'
 
-const content = ref<string>(`
+const myMarkdownIt = new MarkdownIt({
+  html: true,
+  linkify: true,
+  breaks: true,
+  highlight: function (str, lang) {
+    return '<pre class="hljs"><code>' + '固定文本' + '</code></pre>'
+  },
+})
+const plugin = [emoji]
+const fencePlugin = {
+  echarts: Echarts,
+}
+const content = ref<string>('')
+// 模拟流式内容更新
+const streamContent = `
+# markdown原生插件测试
+左边为未引入插件时的输出,右边为引入fence插件和原生插件后的输出
+## emoji插件测试
+\`:smile:\` -> :smile:
+
+## 自定义fence插件测试
+以下是一段自定义的代码块,以echarts为fence标志,包括一个\`json\`格式echarts option配置,展示在流式响应下的输出
+\`\`\`echarts
+{
+"title": {
+"text": "ECharts 示例图表"
+},
+"tooltip": {},
+"legend": {
+"data": ["销量"]
+},
+"xAxis": {
+"data": ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋"]
+},
+"yAxis": {},
+"series": [{
+"name": "销量",
+"type": "bar",
+"data": [5, 20, 36, 10, 10]
+}]
+}
+\`\`\`
+以上是一个echarts图表,在输出本段结尾文字的时候,如果是简单的通过v-html挂载markdown文本,会导致Echarts组件重复渲染导致闪屏,通过该组件可结合vue的渲染机制diff来避免重复渲染
+`
+const { startTyping } = useTypewriter()
+const stop = startTyping(streamContent, 100, [1, 10], (text: string) => {
+  content.value += text
+})
+
+const content1 = ref<string>(`
 # Markdown 常用样式示例
 ## 1. 标题
 # H1
